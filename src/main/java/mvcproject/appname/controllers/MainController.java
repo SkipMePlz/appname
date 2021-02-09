@@ -15,4 +15,8 @@ public class MainController {
     public String helloPage(){
         return "hello";
     }
+    @GetMapping("/login")
+    public String loginPage(){
+        return "login";
+    }
 }
