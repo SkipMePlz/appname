@@ -17,14 +17,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/","/home").permitAll()
-                .anyRequest()
-                .authenticated().
-                and()
+                .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/**").permitAll()
+                .and()
                 .formLogin().loginPage("/login")
                 .permitAll()
                 .and()
-                .logout().permitAll().logoutSuccessUrl("/");
+                .logout().permitAll().logoutSuccessUrl("/")
+                .and().exceptionHandling().accessDeniedPage("/accessDenied");
+
+
     }
     @Bean
     @Override
