@@ -4,16 +4,21 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "User")
+@Table(name = "Users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private int id;
     private String email;
     private String password;
     private String name;
     private String surname;
     private boolean isActive;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "ROLE",
+    joinColumns = @JoinColumn(name = "roles"),
+    inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
     public User() {

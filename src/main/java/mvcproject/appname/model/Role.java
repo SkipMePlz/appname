@@ -3,11 +3,13 @@ package mvcproject.appname.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="Roles")
+@Table(name="ROLE")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Role_id")
     private int id;
+
     private Role role;
 
     public Role() {
