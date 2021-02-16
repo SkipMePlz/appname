@@ -4,11 +4,17 @@ import mvcproject.appname.model.User;
 import mvcproject.appname.repositories.RoleRepository;
 import mvcproject.appname.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import java.util.Collections;
 
+@Service
 public class MainService implements UserService{
     private RoleRepository roleRepository;
     private UserRepository userRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
     public void setRoleRepository(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
@@ -20,8 +26,9 @@ public class MainService implements UserService{
 
     @Override
     public User saveUser(User user) {
-        user.setPassword(BCrypt.hashpw(user.getPassword(),BCrypt.gensalt(4)));
         user.setActive(true);
+        user.setRoles(Collections.singleton(roleRepository.getRoleById(2)));
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 

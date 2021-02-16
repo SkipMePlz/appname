@@ -1,21 +1,25 @@
 package mvcproject.appname.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-@Table(name="ROLE")
+@Table(name="role")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Role_id")
+    @Column(name = "role_id")
     private int id;
-
-    private Role role;
+    @Column(name = "role")
+    private String role;
+    @Transient
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
 
     public Role() {
     }
 
-    public Role(int id, Role role) {
+    public Role(int id, String role) {
         this.id = id;
         this.role = role;
     }
@@ -28,11 +32,19 @@ public class Role {
         this.id = id;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }

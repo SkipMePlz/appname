@@ -44,22 +44,23 @@ public class MainController {
             bindingResult.rejectValue("email","email.error","E-mail is already used.");
             return "registration";
         }
-        if(user.getPassword() == null || user.getPassword().length() < 6){
+        if(user.getPassword() == "" || user.getPassword().length() < 6){
             bindingResult.rejectValue("password","password.error","Password should be 6 signs or more");
             return "registration";
         }
-        if(user.getName() == null){
+        if(user.getName() == ""){
             bindingResult.rejectValue("name","name.error","You should write down your name");
             return "registration";
         }
-        if(user.getSurname() == null){
+        if(user.getSurname() == ""){
             bindingResult.rejectValue("surname","surname.error","You should write down your surname");
             return "registration";
         }
-
-
-
         userService.saveUser(user);
-    return "userHome";
+    return "redirect:/userHome";
+    }
+    @GetMapping("/adminHome")
+    public String adminHomePage(){
+        return "adminHome";
     }
 }

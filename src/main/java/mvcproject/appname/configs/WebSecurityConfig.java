@@ -6,37 +6,29 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/user/**").hasAnyRole("USER","ADMIN")
-                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/userHome").hasAnyRole("USER","ADMIN")
+                .antMatchers("/adminHome").hasRole("ADMIN")
                 .antMatchers("/**").permitAll()
                 .and()
                 .formLogin().loginPage("/login")
                 .permitAll()
                 .and()
                 .logout().permitAll().logoutSuccessUrl("/")
-                .and().exceptionHandling().accessDeniedPage("/accessDenied");
+                .and().exceptionHandling().accessDeniedPage("/403");
 
 
     }
-    @Bean
-    @Override
-    protected UserDetailsService userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("user")
-                .password("user")
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
-    }
+
 }
