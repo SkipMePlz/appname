@@ -21,7 +21,6 @@ public class User {
     @Column(name = "isActive")
     private boolean isActive;
     @ManyToMany
-    @Column(name = "roles")
     private Set<Role> roles;
 
     public User() {

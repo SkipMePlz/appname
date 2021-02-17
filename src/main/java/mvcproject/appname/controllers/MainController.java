@@ -4,6 +4,8 @@ import mvcproject.appname.model.User;
 import mvcproject.appname.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -61,17 +63,25 @@ public class MainController {
             return "registration";
         }
         userService.saveUser(user);
-    return "redirect:/userHome";
+    return "redirect:/login";
     }
     @GetMapping("/adminHome")
-    public String adminHomePage(Model model, Principal principal){
+    public ModelAndView adminHomePage(){
+        ModelAndView modelAndView = new ModelAndView("/userHome");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByEmail(authentication.getName());
+        modelAndView.addObject("admin","Welcome back " + user.getName() + " "+ user.getSurname());
 
-
-        return "adminHome";
+        return modelAndView;
     }
     @GetMapping("/userHome")
-    public String userHomePage(Model model, Principal principal){
-        return "userHome";
+    public ModelAndView userHomePage(){
+        ModelAndView modelAndView = new ModelAndView("/userHome");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByEmail(authentication.getName());
+        modelAndView.addObject("user","Welcome back " + user.getName() + " "+ user.getSurname());
+
+        return modelAndView;
     }
     @GetMapping("/accessDenied")
     public String accessDeniedPage(){

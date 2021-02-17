@@ -12,8 +12,13 @@ import java.util.Collections;
 public class MainService implements UserService{
     private RoleRepository roleRepository;
     private UserRepository userRepository;
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public MainService(RoleRepository roleRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @Autowired
     public void setRoleRepository(RoleRepository roleRepository) {
@@ -27,7 +32,7 @@ public class MainService implements UserService{
     @Override
     public User saveUser(User user) {
         user.setActive(true);
-        user.setRoles(Collections.singleton(roleRepository.getRoleById(2)));
+        user.setRoles(Collections.singleton(roleRepository.findByRole("ADMIN")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
