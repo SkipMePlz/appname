@@ -20,7 +20,7 @@ public class User {
     private String surname;
     @Column(name = "isActive")
     private boolean isActive;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @Column(name = "roles")
     private Set<Role> roles;
 

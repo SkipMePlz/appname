@@ -3,12 +3,16 @@ package mvcproject.appname.controllers;
 import mvcproject.appname.model.User;
 import mvcproject.appname.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.security.Principal;
 
 @Controller
 public class MainController {
@@ -60,7 +64,17 @@ public class MainController {
     return "redirect:/userHome";
     }
     @GetMapping("/adminHome")
-    public String adminHomePage(){
+    public String adminHomePage(Model model, Principal principal){
+
+
         return "adminHome";
+    }
+    @GetMapping("/userHome")
+    public String userHomePage(Model model, Principal principal){
+        return "userHome";
+    }
+    @GetMapping("/accessDenied")
+    public String accessDeniedPage(){
+        return "accessDenied";
     }
 }
