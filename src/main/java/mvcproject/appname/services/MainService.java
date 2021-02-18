@@ -32,7 +32,7 @@ public class MainService implements UserService{
     @Override
     public User saveUser(User user) {
         user.setActive(true);
-        user.setRoles(Collections.singleton(roleRepository.findByRole("ADMIN")));
+        user.setRoles(Collections.singleton(roleRepository.findByRole("USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

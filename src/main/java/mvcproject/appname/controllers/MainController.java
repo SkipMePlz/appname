@@ -65,9 +65,9 @@ public class MainController {
         userService.saveUser(user);
     return "redirect:/login";
     }
-    @GetMapping("/adminHome")
+    @GetMapping("/admin/adminHome")
     public ModelAndView adminHomePage(){
-        ModelAndView modelAndView = new ModelAndView("/userHome");
+        ModelAndView modelAndView = new ModelAndView("/admin/adminHome");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(authentication.getName());
         modelAndView.addObject("admin","Welcome back " + user.getName() + " "+ user.getSurname());
