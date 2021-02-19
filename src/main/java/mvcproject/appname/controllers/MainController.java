@@ -4,10 +4,8 @@ import mvcproject.appname.model.User;
 import mvcproject.appname.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -65,9 +63,9 @@ public class MainController {
         userService.saveUser(user);
     return "redirect:/login";
     }
-    @GetMapping("/admin/adminHome")
+    @GetMapping("/adminHome")
     public ModelAndView adminHomePage(){
-        ModelAndView modelAndView = new ModelAndView("/admin/adminHome");
+        ModelAndView modelAndView = new ModelAndView("adminHome");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(authentication.getName());
         modelAndView.addObject("admin","Welcome back " + user.getName() + " "+ user.getSurname());
@@ -76,7 +74,7 @@ public class MainController {
     }
     @GetMapping("/userHome")
     public ModelAndView userHomePage(){
-        ModelAndView modelAndView = new ModelAndView("/userHome");
+        ModelAndView modelAndView = new ModelAndView("userHome");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(authentication.getName());
         modelAndView.addObject("user","Welcome back " + user.getName() + " "+ user.getSurname());
