@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<head>
+    <meta charset="UTF-8">
+    <title>Новости</title>
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Новости</h1>
+    <div th:each="note : ${notes}" class="alert alert-info mt-2">
+        <h3 th:text="${note.title}"/>
+        <p th:text="${note.text}"/>
+        <div>
+            <p th:text="${note.author}"/>
+            <p th:text="${note.date}"/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

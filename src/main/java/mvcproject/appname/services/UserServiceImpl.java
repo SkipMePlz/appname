@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 
 @Service
-public class MainService implements UserService{
+public class UserServiceImpl implements UserService{
     private RoleRepository roleRepository;
     private UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public MainService(RoleRepository roleRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;

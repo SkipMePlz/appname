@@ -1,6 +1,7 @@
 package mvcproject.appname.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -34,6 +35,11 @@ public class User {
         this.surname = surname;
         this.isActive = isActive;
         this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     public int getId() {

@@ -1,14 +1,37 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <head>
     <meta charset="UTF-8">
-    <title>Admin home page</title>
+    <title>Создать запись</title>
+    <style>
+        .note-creation-form {
+		width: 600px;
+		margin-left: 30px;
+		padding: 30px 0;
+	}
+    </style>
 </head>
 <body>
-<h1>This is an admin page</h1>
-<p th:text="${admin}"></p>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="Sign out"/>
+<h2>Создание записи</h2>
+<div class="note-creation-form">
+<form th:method="post" th:action="@{/adminHome}" th:object="${note}">
+    <div class="alert alert-danger" th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Error</div>
+    <div class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error</div>
+    <div class="form-group">
+        <label for="title">Заголовок</label>
+        <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="Заголовок"/>
+    </div>
+         <div class="form-group">
+             <label for="text">Введите текст</label>
+             <textarea class="form-control" id="text" th:field="*{text}"rows="3"></textarea>
+         </div>
+         <div class="form-group">
+             <button type="submit" class="btn btn-primary btn-block btn-lg">Добавить запись</button>
+         </div>
 </form>
+</div>
 </body>
 </html>
