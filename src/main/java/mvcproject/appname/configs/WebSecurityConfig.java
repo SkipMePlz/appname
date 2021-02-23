@@ -31,10 +31,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/","/login","/registration").permitAll()
-                .antMatchers("/adminHome").hasAuthority("ADMIN")
+                .antMatchers("/adminHome/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/login").failureUrl("/login?error=true")
-                .defaultSuccessUrl("/userHome").usernameParameter("email").passwordParameter("password")
+                .defaultSuccessUrl("/news").usernameParameter("email").passwordParameter("password")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/").and().exceptionHandling().accessDeniedPage("/accessDenied");

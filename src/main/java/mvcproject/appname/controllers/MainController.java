@@ -12,13 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.thymeleaf.expression.Lists;
-
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -85,7 +81,6 @@ public class MainController {
     public ModelAndView userHomePage(){
         ModelAndView modelAndView = new ModelAndView("news");
         List<Note> notes = noteService.getAllNotes();
-        Collections.reverse(notes);
         modelAndView.addObject("notes",notes);
 
         return modelAndView;
@@ -109,5 +104,30 @@ public class MainController {
     @GetMapping("/accessDenied")
     public String accessDeniedPage(){
         return "accessDenied";
+    }
+
+    @GetMapping("/adminHome/{id}/edit")
+    public String noteEdit(@PathVariable("id") Long id,Model model){
+        Note selectedNote = noteService.findById(id);
+        model.addAttribute("note",selectedNote);
+        return "note-edit";
+    }
+    @PostMapping("/adminHome/{id}/edit")
+    public String noteUpdate(@ModelAttribute("note") Note note,@PathVariable("id") Long id, BindingResult bindingResult){
+        if(note.getText()=="" || note == null){
+            bindingResult.rejectValue("text","text.error","Нельзя отправить пустую запись");
+            return "note-edit";
+        }
+        if(note.getTitle()=="" || note.getTitle() == null){
+            bindingResult.rejectValue("title","title.error","Укажите заголовок");
+            return "note-edit";
+        }
+        noteService.updateNote(id,note);
+        return "redirect:/news";
+    }
+    @PostMapping("/adminHome/{id}")
+    public String noteDeletePage(@PathVariable("id") Long id){
+        noteService.deleteNoteById(id);
+        return "redirect:/news";
     }
 }
