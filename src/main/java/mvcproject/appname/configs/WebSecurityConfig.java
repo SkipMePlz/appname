@@ -30,14 +30,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/","/login","/registration").permitAll()
+                .antMatchers("/login","/registration").permitAll()
                 .antMatchers("/adminHome/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/login").failureUrl("/login?error=true")
                 .defaultSuccessUrl("/news").usernameParameter("email").passwordParameter("password")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/").and().exceptionHandling().accessDeniedPage("/accessDenied");
+                .logoutSuccessUrl("/login").and().exceptionHandling().accessDeniedPage("/accessDenied");
 
     }
 

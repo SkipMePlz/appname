@@ -31,15 +31,6 @@ public class MainController {
         this.userService = userService;
     }
 
-    @GetMapping({"/","/home"})
-    public String homePage(){
-        return "home";
-    }
-
-    @GetMapping("/hello")
-    public String helloPage(){
-        return "hello";
-    }
     @GetMapping("/login")
     public String loginPage(){
         return "login";
@@ -77,7 +68,7 @@ public class MainController {
         model.addAttribute("note",new Note());
        return "adminHome";
     }
-    @GetMapping("/news")
+    @GetMapping({"/news","/"})
     public ModelAndView userHomePage(){
         ModelAndView modelAndView = new ModelAndView("news");
         List<Note> notes = noteService.getAllNotes();
@@ -125,7 +116,7 @@ public class MainController {
         noteService.updateNote(id,note);
         return "redirect:/news";
     }
-    @PostMapping("/adminHome/{id}")
+    @GetMapping("/adminHome/{id}")
     public String noteDeletePage(@PathVariable("id") Long id){
         noteService.deleteNoteById(id);
         return "redirect:/news";
