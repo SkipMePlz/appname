@@ -86,6 +86,10 @@ public class MainController {
             bindingResult.rejectValue("title","title.error","Укажите заголовок");
             return "adminHome";
         }
+        if(note.getText().length()>1000){
+            bindingResult.rejectValue("text","text.error","Текст может содержать до 1000 символов");
+            return "adminHome";
+        }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(authentication.getName());
         note.setAuthor(user);
