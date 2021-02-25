@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<link rel="stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <style>
     body {
             background-color: #eeeeee;
         }
+
 </style>
 <head>
-    <meta charset="UTF-8">
-    <title>Создать запись</title>
+  <meta charset="UTF-8">
+  <title>Создать запись</title>
 </head>
 <body>
 <div class="container">
-    <div class="raw">
-<div class="col-md-8 col-md-offset-2">
-    <h1>Создание записи</h1>
-<form th:method="post" th:action="@{/adminHome}" th:object="${note}">
-    <div class="alert alert-danger" th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Error</div>
-    <div class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error</div>
-    <div class="form-group">
-        <label for="title">Заголовок</label>
-        <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="Заголовок"/>
+  <div class="raw">
+    <div class="col-md-8 col-md-offset-2">
+      <h1>Создание записи</h1>
+      <form th:method="post" th:action="@{/adminHome}" th:object="${note}">
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('text')}" th:errors="*{text}">
+          Error
+        </div>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+          Error
+        </div>
+        <div class="form-group">
+          <label for="title">Заголовок</label>
+          <input type="text" id="title" th:field="*{title}" class="form-control"
+                 placeholder="Заголовок"/>
+        </div>
+        <div class="form-group">
+          <label for="text">Введите текст</label>
+          <textarea class="form-control" id="text" th:field="*{text}" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Добавить запись</button>
+          <a class="btn btn-default" th:href="@{/news}" type="button">Отмена</a>
+        </div>
+      </form>
     </div>
-         <div class="form-group">
-             <label for="text">Введите текст</label>
-             <textarea class="form-control" id="text" th:field="*{text}"rows="3"></textarea>
-         </div>
-         <div class="form-group">
-             <button type="submit" class="btn btn-primary">Добавить запись</button>
-             <a class="btn btn-default" th:href="@{/news}" type="button" >Отмена</a>
-         </div>
-</form>
-</div>
-</div>
+  </div>
 </div>
 </body>
 </html>

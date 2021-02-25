@@ -2,69 +2,70 @@ package mvcproject.appname.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notes")
+@Table(name = "notes", indexes = @Index(columnList = "date"))
 public class Note {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private LocalDate date;
-    @ManyToOne
-    private User author;
-    @Column(length = 1000)
-    private String text;
-    private String title;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    public String getTitle() {
-        return title;
-    }
+  private LocalDateTime date;
+  @ManyToOne private User author;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  @Column(length = 1000)
+  private String text;
 
-    public Note() {
-    }
+  private String title;
 
-    public Note(Long id, LocalDate date, User author, String text, String title) {
-        this.id = id;
-        this.date = date;
-        this.author = author;
-        this.text = text;
-        this.title=title;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public Note() {}
 
-    public LocalDate getDate() {
-        return date;
-    }
+  public Note(Long id, LocalDateTime date, User author, String text, String title) {
+    this.id = id;
+    this.date = date;
+    this.author = author;
+    this.text = text;
+    this.title = title;
+  }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public User getAuthor() {
-        return author;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setAuthor(User author) {
-        this.author = author;
-    }
+  public LocalDateTime getDate() {
+    return date;
+  }
 
-    public String getText() {
-        return text;
-    }
+  public void setDate(LocalDateTime date) {
+    this.date = date;
+  }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+  public User getAuthor() {
+    return author;
+  }
 
+  public void setAuthor(User author) {
+    this.author = author;
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public void setText(String text) {
+    this.text = text;
+  }
 }

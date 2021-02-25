@@ -9,37 +9,40 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 
 @Service
-public class UserServiceImpl implements UserService{
-    private RoleRepository roleRepository;
-    private UserRepository userRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+public class UserServiceImpl implements UserService {
+  private RoleRepository roleRepository;
+  private UserRepository userRepository;
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(RoleRepository roleRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.roleRepository = roleRepository;
-        this.userRepository = userRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+  public UserServiceImpl(
+      RoleRepository roleRepository,
+      UserRepository userRepository,
+      BCryptPasswordEncoder bCryptPasswordEncoder) {
+    this.roleRepository = roleRepository;
+    this.userRepository = userRepository;
+    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+  }
 
-    @Autowired
-    public void setRoleRepository(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+  @Autowired
+  public void setRoleRepository(RoleRepository roleRepository) {
+    this.roleRepository = roleRepository;
+  }
 
-    @Override
-    public User saveUser(User user) {
-        user.setActive(true);
-        user.setRoles(Collections.singleton(roleRepository.findByRole("USER")));
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
+  @Autowired
+  public void setUserRepository(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
-    @Override
-    public User findByEmail(String email) {
-        return userRepository.findOneByEmail(email);
+  @Override
+  public User saveUser(User user) {
+    user.setActive(true);
+    user.setRoles(Collections.singleton(roleRepository.findByRole("USER")));
+    user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    return userRepository.save(user);
+  }
 
-    }
+  @Override
+  public User findByEmail(String email) {
+    return userRepository.findOneByEmail(email);
+  }
 }

@@ -7,94 +7,105 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private int id;
-    @Column(name = "email")
-    private String email;
-    @Column(name = "password")
-    private String password;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "surname")
-    private String surname;
-    @Column(name = "isActive")
-    private boolean isActive;
-    @ManyToMany
-    private Set<Role> roles;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "user_id")
+  private int id;
 
-    public User() {
-    }
+  @Column(name = "email")
+  private String email;
 
-    public User(int id, String email, String password, String name, String surname, boolean isActive, Set<Role> roles) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.surname = surname;
-        this.isActive = isActive;
-        this.roles = roles;
-    }
+  @Column(name = "password")
+  private String password;
 
-    @Override
-    public String toString() {
-        return name;
-    }
+  @Column(name = "name")
+  private String name;
 
-    public int getId() {
-        return id;
-    }
+  @Column(name = "surname")
+  private String surname;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  @Column(name = "isActive")
+  private boolean isActive;
 
-    public String getEmail() {
-        return email;
-    }
+  @ManyToMany private Set<Role> roles;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public User() {}
 
-    public String getPassword() {
-        return password;
-    }
+  public User(
+      int id,
+      String email,
+      String password,
+      String name,
+      String surname,
+      boolean isActive,
+      Set<Role> roles) {
+    this.id = id;
+    this.email = email;
+    this.password = password;
+    this.name = name;
+    this.surname = surname;
+    this.isActive = isActive;
+    this.roles = roles;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  @Override
+  public String toString() {
+    return name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public String getSurname() {
-        return surname;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public boolean isActive() {
-        return isActive;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public void setActive(boolean active) {
-        isActive = active;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getSurname() {
+    return surname;
+  }
+
+  public void setSurname(String surname) {
+    this.surname = surname;
+  }
+
+  public boolean isActive() {
+    return isActive;
+  }
+
+  public void setActive(boolean active) {
+    isActive = active;
+  }
+
+  public Set<Role> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
+  }
 }

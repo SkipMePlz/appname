@@ -19,110 +19,124 @@ import java.util.List;
 
 @Controller
 public class MainController {
-    private UserService userService;
-    private NoteService noteService;
-    @Autowired
-    public void setNoteService(NoteService noteService) {
-        this.noteService = noteService;
-    }
+  private UserService userService;
+  private NoteService noteService;
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
+  @Autowired
+  public void setNoteService(NoteService noteService) {
+    this.noteService = noteService;
+  }
 
-    @GetMapping("/login")
-    public String loginPage(){
-        return "login";
+  @Autowired
+  public void setUserService(UserService userService) {
+    this.userService = userService;
+  }
+
+  @GetMapping("/login")
+  public String loginPage() {
+    return "login";
+  }
+
+  @GetMapping("/registration")
+  public ModelAndView registrationPage() {
+    ModelAndView modelAndView = new ModelAndView("registration");
+    modelAndView.addObject("user", new User());
+    return modelAndView;
+  }
+
+  @PostMapping("/registration")
+  public String registration(@ModelAttribute("user") User user, BindingResult bindingResult) {
+    // checking
+    if (user.getName() == "") {
+      bindingResult.rejectValue("name", "name.error", "Укажите Ваше имя");
+      return "registration";
     }
-    @GetMapping("/registration")
-    public ModelAndView registrationPage(){
-        ModelAndView modelAndView = new ModelAndView("registration");
-        modelAndView.addObject("user", new User());
-        return modelAndView;
+    if (user.getSurname() == "") {
+      bindingResult.rejectValue("surname", "surname.error", "Укажите Вашу фамилию");
+      return "registration";
     }
-    @PostMapping("/registration")
-    public String registration(@ModelAttribute("user") User user, BindingResult bindingResult){
-        //checking
-        if(user.getName() == ""){
-            bindingResult.rejectValue("name","name.error","Укажите Ваше имя");
-            return "registration";
-        }
-        if(user.getSurname() == ""){
-            bindingResult.rejectValue("surname","surname.error","Укажите Вашу фамилию");
-            return "registration";
-        }
-        if(user.getPassword() == "" || user.getPassword().length() < 6){
-            bindingResult.rejectValue("password","password.error","Пароль должен быть длиннее 6 символов");
-            return "registration";
-        }
-        if(userService.findByEmail(user.getEmail()) != null){
-            bindingResult.rejectValue("email","email.error","E-mail уже используется");
-            return "registration";
-        }
-        userService.saveUser(user);
+    if (user.getPassword() == "" || user.getPassword().length() < 6) {
+      bindingResult.rejectValue(
+          "password", "password.error", "Пароль должен быть длиннее 6 символов");
+      return "registration";
+    }
+    if (userService.findByEmail(user.getEmail()) != null) {
+      bindingResult.rejectValue("email", "email.error", "E-mail уже используется");
+      return "registration";
+    }
+    userService.saveUser(user);
     return "redirect:/login";
-    }
-    @GetMapping("/adminHome")
-    public String adminHomePage(Model model){
-        model.addAttribute("note",new Note());
-       return "adminHome";
-    }
-    @GetMapping({"/news","/"})
-    public ModelAndView userHomePage(){
-        ModelAndView modelAndView = new ModelAndView("news");
-        List<Note> notes = noteService.getAllNotes();
-        modelAndView.addObject("notes",notes);
+  }
 
-        return modelAndView;
-    }
-    @PostMapping("/adminHome")
-    public String createNote(@ModelAttribute("note") Note note,BindingResult bindingResult){
-        if(note.getText()=="" || note == null){
-            bindingResult.rejectValue("text","text.error","Нельзя отправить пустую запись");
-            return "adminHome";
-        }
-        if(note.getTitle()=="" || note.getTitle() == null){
-            bindingResult.rejectValue("title","title.error","Укажите заголовок");
-            return "adminHome";
-        }
-        if(note.getText().length()>1000){
-            bindingResult.rejectValue("text","text.error","Текст может содержать до 1000 символов");
-            return "adminHome";
-        }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findByEmail(authentication.getName());
-        note.setAuthor(user);
-        noteService.saveNote(note);
-        return "redirect:/news";
-    }
-    @GetMapping("/accessDenied")
-    public String accessDeniedPage(){
-        return "accessDenied";
-    }
+  @GetMapping("/adminHome")
+  public String adminHomePage(Model model) {
+    model.addAttribute("note", new Note());
+    return "adminHome";
+  }
 
-    @GetMapping("/adminHome/{id}/edit")
-    public String noteEdit(@PathVariable("id") Long id,Model model){
-        Note selectedNote = noteService.findById(id);
-        model.addAttribute("note",selectedNote);
-        return "note-edit";
+  @GetMapping({"/news", "/"})
+  public ModelAndView userHomePage() {
+    ModelAndView modelAndView = new ModelAndView("news");
+    List<Note> notes = noteService.getAllNotes();
+    modelAndView.addObject("notes", notes);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = userService.findByEmail(authentication.getName());
+    modelAndView.addObject("user", user);
+
+    return modelAndView;
+  }
+
+  @PostMapping("/adminHome")
+  public String createNote(@ModelAttribute("note") Note note, BindingResult bindingResult) {
+    if (note.getText() == "" || note == null) {
+      bindingResult.rejectValue("text", "text.error", "Нельзя отправить пустую запись");
+      return "adminHome";
     }
-    @PostMapping("/adminHome/{id}/edit")
-    public String noteUpdate(@ModelAttribute("note") Note note,@PathVariable("id") Long id, BindingResult bindingResult){
-        if(note.getText()=="" || note == null){
-            bindingResult.rejectValue("text","text.error","Нельзя отправить пустую запись");
-            return "note-edit";
-        }
-        if(note.getTitle()=="" || note.getTitle() == null){
-            bindingResult.rejectValue("title","title.error","Укажите заголовок");
-            return "note-edit";
-        }
-        noteService.updateNote(id,note);
-        return "redirect:/news";
+    if (note.getTitle() == "" || note.getTitle() == null) {
+      bindingResult.rejectValue("title", "title.error", "Укажите заголовок");
+      return "adminHome";
     }
-    @GetMapping("/adminHome/{id}")
-    public String noteDeletePage(@PathVariable("id") Long id){
-        noteService.deleteNoteById(id);
-        return "redirect:/news";
+    if (note.getText().length() > 1000) {
+      bindingResult.rejectValue("text", "text.error", "Текст может содержать до 1000 символов");
+      return "adminHome";
     }
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = userService.findByEmail(authentication.getName());
+    note.setAuthor(user);
+    noteService.saveNote(note);
+    return "redirect:/news";
+  }
+
+  @GetMapping("/accessDenied")
+  public String accessDeniedPage() {
+    return "accessDenied";
+  }
+
+  @GetMapping("/adminHome/{id}/edit")
+  public String noteEdit(@PathVariable("id") Long id, Model model) {
+    Note selectedNote = noteService.findById(id);
+    model.addAttribute("note", selectedNote);
+    return "note-edit";
+  }
+
+  @PostMapping("/adminHome/{id}/edit")
+  public String noteUpdate(
+      @ModelAttribute("note") Note note, @PathVariable("id") Long id, BindingResult bindingResult) {
+    if (note.getText() == "" || note == null) {
+      bindingResult.rejectValue("text", "text.error", "Нельзя отправить пустую запись");
+      return "note-edit";
+    }
+    if (note.getTitle() == "" || note.getTitle() == null) {
+      bindingResult.rejectValue("title", "title.error", "Укажите заголовок");
+      return "note-edit";
+    }
+    noteService.updateNote(id, note);
+    return "redirect:/news";
+  }
+
+  @GetMapping("/adminHome/{id}")
+  public String noteDeletePage(@PathVariable("id") Long id) {
+    noteService.deleteNoteById(id);
+    return "redirect:/news";
+  }
 }
