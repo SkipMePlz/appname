@@ -3,15 +3,18 @@ package mvcproject.appname.services;
 import mvcproject.appname.model.Note;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.repository.Query;
 
 public interface NoteService {
   public Note saveNote(Note note);
 
   public Note findNoteByUserId(int id);
 
-  public List<Note> getAllNotes();
+  public Page<Note> getAllPageNotes(Integer pageNum);
 
-  public Note findById(Long id);
+
+  public Note findNoteById(Long id);
 
   public void updateNote(Long id, Note note);
 

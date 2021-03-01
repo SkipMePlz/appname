@@ -5,6 +5,7 @@ import mvcproject.appname.model.User;
 import mvcproject.appname.services.NoteService;
 import mvcproject.appname.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
@@ -74,11 +76,19 @@ public class MainController {
     return "adminHome";
   }
 
-  @GetMapping({"/news", "/"})
-  public ModelAndView userHomePage() {
+  @GetMapping({"/news","/"})
+  public ModelAndView userHomePage(@RequestParam(required = false) Integer page) {
+    if (page == null){
+      page = 1;
+    }
     ModelAndView modelAndView = new ModelAndView("news");
-    List<Note> notes = noteService.getAllNotes();
+    Page<Note> pages = noteService.getAllPageNotes(page);
+    List<Note> notes = pages.getContent();
+    int totalPages = pages.getTotalPages();
     modelAndView.addObject("notes", notes);
+    modelAndView.addObject("currentPage",page);
+    modelAndView.addObject("totalPages",totalPages);
+
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     User user = userService.findByEmail(authentication.getName());
     modelAndView.addObject("user", user);
@@ -96,8 +106,8 @@ public class MainController {
       bindingResult.rejectValue("title", "title.error", "Укажите заголовок");
       return "adminHome";
     }
-    if (note.getText().length() > 1000) {
-      bindingResult.rejectValue("text", "text.error", "Текст может содержать до 1000 символов");
+    if (note.getText().length() > 2000) {
+      bindingResult.rejectValue("text", "text.error", "Текст может содержать до 2000 символов");
       return "adminHome";
     }
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -114,7 +124,7 @@ public class MainController {
 
   @GetMapping("/adminHome/{id}/edit")
   public String noteEdit(@PathVariable("id") Long id, Model model) {
-    Note selectedNote = noteService.findById(id);
+    Note selectedNote = noteService.findNoteById(id);
     model.addAttribute("note", selectedNote);
     return "note-edit";
   }
@@ -130,6 +140,10 @@ public class MainController {
       bindingResult.rejectValue("title", "title.error", "Укажите заголовок");
       return "note-edit";
     }
+    if (note.getTitle().length() >=255) {
+      bindingResult.rejectValue("title", "title.error", "Слишком длинный заголовой");
+      return "note-edit";
+    }
     noteService.updateNote(id, note);
     return "redirect:/news";
   }
@@ -138,5 +152,10 @@ public class MainController {
   public String noteDeletePage(@PathVariable("id") Long id) {
     noteService.deleteNoteById(id);
     return "redirect:/news";
+  }
+  @GetMapping("/news/details/{id}")
+  public String noteDetails(@PathVariable("id") Long id, Model model){
+      model.addAttribute("note",noteService.findNoteById(id));
+    return "detail";
   }
 }

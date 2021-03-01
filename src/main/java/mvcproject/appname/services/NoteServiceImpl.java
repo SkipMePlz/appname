@@ -2,7 +2,12 @@ package mvcproject.appname.services;
 
 import mvcproject.appname.model.Note;
 import mvcproject.appname.repositories.NoteRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,12 +34,12 @@ public class NoteServiceImpl implements NoteService {
   }
 
   @Override
-  public List<Note> getAllNotes() {
-    return noteRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
+  public Page<Note> getAllPageNotes(Integer pageNum) {
+    Pageable pageable = PageRequest.of(pageNum-1,10,Sort.by("date").descending());
+    return noteRepository.findAll(pageable);
   }
-
   @Override
-  public Note findById(Long id) {
+  public Note findNoteById(Long id) {
     return noteRepository.getOne(id);
   }
 

@@ -14,7 +14,7 @@ public class Note {
   private LocalDateTime date;
   @ManyToOne private User author;
 
-  @Column(length = 1000)
+  @Column(length = 2000)
   private String text;
 
   private String title;
